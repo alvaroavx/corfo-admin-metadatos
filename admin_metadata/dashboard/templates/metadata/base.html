@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% include 'metadata/header.html' with title=block.title %}
+</head>
+<body>
+    <!-- Banner superior -->
+    {% include 'metadata/banner.html' %}
+
+    <!-- Contenido principal -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer -->
+    {% include 'metadata/footer.html' %}
+</body>
+</html>

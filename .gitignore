@@ -1,0 +1,73 @@
+# Archivos de Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# Entorno virtual
+venv/
+env/
+*.egg-info/
+*.egg
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Archivos de configuración de entorno
+.env
+*.env
+
+# Archivos de bases de datos locales
+db.sqlite3
+*.sqlite3
+
+# Migraciones de Django (opcional, si deseas forzar la regeneración en cada entorno)
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.pyd
+*/migrations/*.so
+*/migrations/*.sqlite3
+
+# Archivos estáticos y compilados
+staticfiles/
+static/
+media/
+media/archivos/
+*.log
+*.pot
+*.mo
+
+# Archivos de caché
+*.swp
+*.swo
+*.swn
+*.bak
+*.log
+*.tmp
+__MACOSX/
+Thumbs.db
+.DS_Store
+
+# Configuración de editores y entornos de desarrollo
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# Archivos de compilación de Django
+node_modules/
+npm-debug.log
+yarn-error.log
+coverage/
+htmlcov/
+
+# Archivos de Docker (si aplican)
+docker-compose.override.yml
+.env.docker
+
+# Archivos de CI/CD (si no quieres incluirlos en Git)
+.github/
+.gitlab-ci.yml

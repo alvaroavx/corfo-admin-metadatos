@@ -1,0 +1,118 @@
+{% extends 'metadata/base.html' %}
+
+<!-- Title -->
+{% block title %}Administrador de Metadata{% endblock %}
+
+<!-- Header -->
+{% include 'metadata/banner.html' %}
+
+<!-- Main Content -->
+{% block content %}
+    <div class="container mt-5">
+
+        <h1 class="mb-4">Listado de Registros</h1>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Sistema de Origen</th>
+                    <th>Colección asignada</th>
+                    <th>Fecha de Carga</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                    <th>Revisión</th>
+                    <th>Envío</th>
+                </tr>
+                <!--<tr>
+                    <th></th>
+                    <th><input type="text" id="filter-title" class="form-control form-control-sm" placeholder="Filtrar título"></th>
+                    <th><input type="text" id="filter-author" class="form-control form-control-sm" placeholder="Filtrar autor"></th>
+                    <th><input type="text" id="filter-system" class="form-control form-control-sm" placeholder="Filtrar sistema de origen"></th>
+                    <th><input type="text" id="filter-status" class="form-control form-control-sm" placeholder="Filtrar estado"></th>
+                </tr>-->
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <!-- Envolvemos cada fila en un enlace -->
+                <!--<tr onclick="window.location='{% url 'registro_detalle' registro.id %}'" style="cursor: pointer;">-->
+                <tr>
+                    <td>{{ registro.id }}</td>
+                    <td>{{ registro.titulo }}</td>
+                    <td>{{ registro.autor }}</td>
+                    <td>{{ registro.sistema_origen }}</td>
+                    <td>
+                        {% if registro.coleccion %}
+                            {{ registro.coleccion }}
+                        {% else %}
+                            <span class="badge bg-secondary">No asignada</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ registro.fecha_carga|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if registro.estado == "pendiente" %}
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        {% elif registro.estado == "aprobado" %}
+                            <span class="badge bg-success">Aprobado</span>
+                        {% elif registro.estado == "rechazado" %}
+                            <span class="badge bg-danger">Rechazado</span>
+                        {% elif registro.estado == "enviado" %}
+                            <span class="badge bg-primary">Enviado</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Desconocido</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <!-- Botón para ver -->
+                        <a href="{% url 'registro_detalle' registro.id %}" class="btn btn-primary btn-sm" title="Ver">
+                            <i class="fas fa-eye"></i> 
+                        </a>
+                        <!-- Botón para modificar -->
+                        <a href="{% url 'registro_modificar' registro.id %}" class="btn btn-info btn-sm" title="Modificar">
+                            <i class="fas fa-edit"></i> 
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        {% if registro.estado == "pendiente" and registro.coleccion %}
+                            <!-- Botón para aprobar -->
+                            <a href="{% url 'registro_aprobar' registro.id %}" 
+                                class="btn btn-success btn-sm" 
+                                title="Aprobar"
+                                onclick="return confirm('¿Está seguro de que desea aprobar este registro?');">
+                                <i class="fas fa-check"></i>
+                            </a>
+                        {% endif %}
+                        {% if registro.estado != "rechazado" and registro.estado != "enviado" %}
+                            <!-- Botón para rechazar -->
+                            <a href="{% url 'registro_rechazar' registro.id %}" 
+                                class="btn btn-danger btn-sm" 
+                                title="Rechazar"
+                                onclick="return confirm('¿Está seguro de que desea rechazar este registro?');">
+                                <i class="fas fa-times"></i> 
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if registro.estado == "aprobado" %}
+                            <a href="{% url 'registro_enviar' registro.id %}" 
+                                class="btn btn-primary btn-sm" 
+                                title="Enviar a DSpace">
+                                <i class="fas fa-paper-plane"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No hay registros disponibles</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        
+    </script>
+{% endblock %}

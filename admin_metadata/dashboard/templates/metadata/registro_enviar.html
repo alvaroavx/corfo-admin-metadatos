@@ -1,0 +1,123 @@
+{% extends 'metadata/base.html' %}
+
+<!-- Title -->
+{% block title %}Envío a DSpace{% endblock %}
+
+<!-- Header -->
+{% include 'metadata/banner.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Envío de Registros a DSpace</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+                <tr id="row-{{ registro.id }}">
+                    <td>{{ registro.titulo }}</td>
+                    <td>{{ registro.autor }}</td>
+                    <td id="estado-{{ registro.id }}">Pendiente</td>
+                    <td>
+                        <button class="btn btn-primary enviar-btn" data-id="{{ registro.id }}">
+                            Enviar a DSpace
+                        </button>
+                    </td>
+                </tr>
+                <tr id="progreso-{{ registro.id }}">
+                    <td colspan="4">
+                        <div class="progress" style="height: 20px;">
+                            <div id="progress-bar-{{ registro.id }}" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;">0%</div>
+                        </div>
+                        <ul id="pasos-{{ registro.id }}" class="list-unstyled">
+                            <li><strong>1. Autenticado: </strong><span id="autenticado-{{ registro.id }}">No</span></li>
+                            <li><strong>2. Workspace creado: </strong><span id="workspace-{{ registro.id }}">No</span></li>
+                            <li><strong>3. Metadata ingresada: </strong><span id="metadata-{{ registro.id }}">No</span></li>
+                            <li><strong>4. Archivo subido: </strong><span id="archivo-{{ registro.id }}">No</span></li>
+                            <li><strong>5. Publicado: </strong><span id="publicado-{{ registro.id }}">No</span></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr id="errores-{{ registro.id }}">
+                    <td colspan="4">
+                        <div id="error-container-{{ registro.id }}" class="alert alert-danger d-none"></div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Funcion para llamar al servicio que ejecutara el envio
+    document.querySelectorAll(".enviar-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            let registroId = this.getAttribute("data-id");
+            let errorContainer = document.getElementById(`error-container-${registroId}`);
+            errorContainer.classList.add("d-none"); // Ocultar errores previos
+            errorContainer.innerHTML = ""; // Limpiar errores previos
+            document.getElementById(`estado-${registroId}`).innerText = "Enviando...";
+
+            fetch(`/ejecutar-envio/${registroId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`estado-${registroId}`).innerText = "Enviado";
+                    } else {
+                        document.getElementById(`estado-${registroId}`).innerText = "Error";
+                        errorContainer.classList.remove("d-none");
+                        errorContainer.innerHTML = "<strong>Errores:</strong><ul>" +
+                            data.errores.map(error => `<li>${error}</li>`).join("") +
+                            "</ul>";
+                    }
+                });
+        });
+    });
+
+    // Función para actualizar el progreso (cada segundo)
+    function updateProgressBar(registroId) {
+        setInterval(function() {
+            fetch(`/estado-tarea/${registroId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const progressBar = document.getElementById(`progress-bar-${registroId}`);
+                    const pasos = data.pasos;
+                    // Actualizar los estados de cada paso
+                    const pasosElementos = [
+                        {id: 'autenticado', estado: pasos.autenticado},
+                        {id: 'workspace', estado: pasos.workspace},
+                        {id: 'metadata', estado: pasos.metadata},
+                        {id: 'archivo', estado: pasos.archivo},
+                        {id: 'publicado', estado: pasos.publicado}
+                    ];
+                    let porcentaje = 0;
+                    pasosElementos.forEach((paso, index) => {
+                        document.getElementById(`${paso.id}-${registroId}`).innerText = paso.estado ? "Sí" : "No";
+                        if (paso.estado) {
+                            porcentaje += 20;  // Aumentar 20% por cada paso completado
+                        }
+                    });
+                    // Actualizar la barra de progreso
+                    progressBar.style.width = `${porcentaje}%`;
+                    progressBar.innerText = `${porcentaje}%`; // Mostrar el porcentaje dentro de la barra
+                });
+        }, 1000);  // Actualizar cada segundo
+    }
+
+    // Iniciar el proceso de actualización para cada registro
+    {% for registro in registros %}
+        updateProgressBar({{ registro.id }});
+    {% endfor %}
+
+});
+</script>
+{% endblock %}

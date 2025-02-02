@@ -1,0 +1,184 @@
+{% extends 'metadata/base.html' %}
+
+<!-- Title -->
+{% block title %}Detalle del Registro{% endblock %}
+
+<!-- Header -->
+{% include 'metadata/banner.html' %}
+
+<!-- Main Content -->
+{% block content %}
+
+    <!-- Botones en la cabecera -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Botón Volver -->
+            <button class="btn btn-secondary" onclick="window.history.back();">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+
+            <!-- Botones de Acción -->
+            <div>
+                <a href="{% url 'registro_modificar' registro.id %}" class="btn btn-info btn-md me-2" title="Modificar">
+                    <i class="fas fa-edit"></i> Modificar
+                </a>
+                {% if registro.coleccion and registro.estado != "aprobado" and registro.estado != "enviado" %}
+                <a href="{% url 'registro_aprobar' registro.id %}" 
+                    class="btn btn-success btn-md me-2" 
+                    title="Aprobar"
+                    onclick="return confirm('¿Está seguro de que desea aprobar este registro?');">
+                    <i class="fas fa-check"></i> Aprobar
+                </a>
+                {% elif registro.estado != "enviado" %}
+                    <a class="btn btn-success btn-md me-2 disabled" 
+                        id="disabled-approve-btn"
+                        title="Colección no asignada" 
+                        tabindex="-1" 
+                        aria-disabled="true">
+                        <i class="fas fa-check"></i> Aprobar
+                    </a>
+                {% endif %}
+                {% if registro.estado != "enviado" %}
+                    <a href="{% url 'registro_rechazar' registro.id %}" 
+                    class="btn btn-danger btn-md me-2"
+                    title="Rechazar"
+                    onclick="return confirm('¿Está seguro de que desea rechazar este registro?');">
+                        <i class="fas fa-times"></i> Rechazar
+                    </a>
+                {% endif %}
+                {% if registro.coleccion and registro.estado == "aprobado" and registro.estado != "enviado" %}
+                    <a href="{% url 'registro_enviar' registro.id %}" 
+                        class="btn btn-primary btn-md me-2" 
+                        title="Enviar a DSpace"
+                        onclick="return confirm('¿Está seguro de que desea enviar este registro?');">
+                        <i class="fas fa-paper-plane"></i> Enviar
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h1 class="mb-4">Detalle del Registro #{{ registro.id }}</h1>
+
+        <!-- Información General del Registro -->
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Título</th>
+                    <td>{{ registro.titulo }}</td>
+                </tr>
+                <tr>
+                    <th>Autor</th>
+                    <td>{{ registro.autor }}</td>
+                </tr>
+                <tr>
+                    <th>Sistema de Origen</th>
+                    <td>{{ registro.sistema_origen }}</td>
+                </tr>
+                <tr>
+                    <th>Fecha de Carga</th>
+                    <td>{{ registro.fecha_carga|date:"d/m/Y H:i" }}</td>
+                </tr>
+                <tr>
+                    <th>Colección de Destino</th>
+                        <td>
+                            {% if coleccion %}
+                                {{ coleccion.name }}
+                                (<a href="http://repositoriodigital.corfo.cl/handle/{{ coleccion.handle }}" target="_blank" title="{{ coleccion.name }}">{{ coleccion.handle }}</a>)
+                            {% else %}
+                                <span class="badge bg-secondary">No asignada</span>
+                            {% endif %}
+                        </td>
+                </tr>
+                <tr>
+                    <th>Estado de Carga</th>
+                    <td>
+                        {% if registro.estado == "pendiente" %}
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        {% elif registro.estado == "aprobado" %}
+                            <span class="badge bg-success">Aprobado</span>
+                        {% elif registro.estado == "rechazado" %}
+                            <span class="badge bg-danger">Rechazado</span>
+                        {% elif registro.estado == "enviado" %}
+                            <span class="badge bg-primary">Enviado</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Desconocido</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Archivo Adjunto</th>
+                    <td>
+                        {% if registro.archivo %}
+                            <a href="{{ registro.archivo.url }}" target="_blank">
+                                <i class="fas fa-file"></i> Descargar archivo
+                            </a>
+                        {% else %}
+                            <span class="badge bg-secondary">No adjunto</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Metadatos Asociados al Registro -->
+        <h2 class="mt-4">Metadatos Asociados</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for metadata in metadatos %}
+                <tr>
+                    <td>{{ metadata.metadata_field }}</td>
+                    <td>{{ metadata.text_value }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">No hay metadatos disponibles</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botones en la cabecera -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Botón Volver -->
+            <button class="btn btn-secondary" onclick="window.history.back();">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+
+            <!-- Botones de Acción 
+            <div>
+                <a href="{% url 'registro_modificar' registro.id %}" class="btn btn-info btn-md me-2" title="Modificar">
+                    <i class="fas fa-edit"></i> Modificar
+                </a>
+                <a href="{% url 'registro_aprobar' registro.id %}" 
+                    class="btn btn-success btn-md me-2" 
+                    title="Aprobar"
+                    onclick="return confirm('¿Está seguro de que desea aprobar este registro?');">
+                    <i class="fas fa-check"></i> Aprobar
+                </a>
+                <a href="{% url 'registro_rechazar' %}" class="btn btn-danger btn-md" title="Rechazar">
+                    <i class="fas fa-times"></i> Rechazar
+                </a>
+            </div>-->
+        </div>
+    </div>
+
+    <script>
+        // Inicializa Select2 en el select con la clase 'select2'
+        $('select.select2').select2({
+            placeholder: "Selecciona una colección",  // Texto predeterminado
+            allowClear: true  // Permite borrar la selección
+        });
+    </script>
+
+{% endblock %}
