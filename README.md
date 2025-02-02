@@ -44,7 +44,7 @@ Admin Metadatos CORFO es una plataforma desarrollada en Python/Django para gesti
    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
    
    DSPACE_USERNAME = "avargas@opengeek.cl"
-   DSPACE_PASSWORD = "184dgy.A"
+   DSPACE_PASSWORD = "******"
    DSPACE_API_URL = "https://repositoriodigital.corfo.cl/server/api"
    ```
 5. Aplicar migraciones:
