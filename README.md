@@ -228,7 +228,7 @@ curl --location 'http://127.0.0.1:8000/api/insertarRegistro/' --form 'titulo="Ot
 ## Usuarios Iniciales
 | Usuario  | Contraseña  | Rol        |
 |----------|------------|------------|
-| root     | 184dgy.A   | superadmin |
+| root     | ********   | superadmin |
 
 ## Contribución
 Para contribuir, por favor sigue el flujo de trabajo basado en `git flow`. Se recomienda crear una rama por funcionalidad y realizar `pull requests` antes de fusionar con la rama principal.
