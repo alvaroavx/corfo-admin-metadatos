@@ -8,9 +8,9 @@
 
 <!-- Main Content -->
 {% block content %}
-
+<div id="contenido">
     <!-- Botones en la cabecera -->
-    <div class="container mt-4">
+    <div class="mt-4">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Botón Volver -->
             <button class="btn btn-secondary" onclick="window.history.back();">
@@ -27,7 +27,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container mt-5">
+    <div class="mt-5">
         <div class="d-flex align-items-center mb-4">
             <h1 class="mb-0 me-2">Modificar Registro #{{ registro.id }}</h1>
             {% if registro.estado == "pendiente" %}
@@ -124,5 +124,5 @@
             </div>
         </form>
     </div>
-
+</div>
 {% endblock %}

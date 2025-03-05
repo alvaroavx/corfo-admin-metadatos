@@ -8,9 +8,9 @@
 
 <!-- Main Content -->
 {% block content %}
-
+<div id="contenido">
     <!-- Botones en la cabecera -->
-    <div class="container mt-4">
+    <div class="mt-4">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Botón Volver -->
             <button class="btn btn-secondary" onclick="window.history.back();">
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container mt-5">
+    <div class="mt-5">
         <h1 class="mb-4">Detalle del Registro #{{ registro.id }}</h1>
 
         <!-- Información General del Registro -->
@@ -148,7 +148,7 @@
     </div>
 
     <!-- Botones en la cabecera -->
-    <div class="container mt-4">
+    <div class=" mt-4">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Botón Volver -->
             <button class="btn btn-secondary" onclick="window.history.back();">
@@ -180,5 +180,5 @@
             allowClear: true  // Permite borrar la selección
         });
     </script>
-
+</div>
 {% endblock %}
