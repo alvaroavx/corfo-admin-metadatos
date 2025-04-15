@@ -137,8 +137,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Variables API DSpace
-DSPACE_USERNAME = "avargas@opengeek.cl"
-DSPACE_PASSWORD = "184dgy.A"
+DSPACE_USERNAME = "soporte@opengeek.cl"
+DSPACE_PASSWORD = "184dgy"
 DSPACE_API_URL = "https://repositoriodigital.corfo.cl/server/api"
 
 # Manejo de archivos
@@ -150,3 +150,8 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'  # O donde tengas configurado Red
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Redireccion LOGIN
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'

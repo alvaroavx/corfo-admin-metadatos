@@ -1,12 +1,15 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from dashboard.models import Register, Metadata
 from dspace_api.models import DspaceCollection
 from dspace_api.services import *
 
+
 @api_view(['GET'])
+@login_required
 def dashboard(request):
     """
     Vista para listar todos los registros cargados en una tabla.
@@ -15,6 +18,7 @@ def dashboard(request):
     registros = Register.objects.all()
     return render(request, 'metadata/dashboard.html', {'registros': registros})
 
+@login_required
 def registro_detalle(request, id):
     """
     Vista de lectura del registro
@@ -32,6 +36,7 @@ def registro_detalle(request, id):
         'coleccion': coleccion,
     })
 
+@login_required
 def registro_modificar(request, id):
     """
     Vista para modificar los datos del registro
@@ -43,6 +48,7 @@ def registro_modificar(request, id):
     metadatos = registro.metadata.all()  # Obtiene todos los metadatos asociados a este registro
     return render(request, 'metadata/registro_modificar.html', {'registro': registro, 'metadatos': metadatos, 'collections': collections})
 
+@login_required
 def registro_aprobar(request, id=None):
     """
     Actualiza el estado del registro o registros a 'aprobado',
@@ -94,6 +100,7 @@ def registro_aprobar(request, id=None):
     # Respuesta para solicitudes no permitidas
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
+@login_required
 def registro_rechazar(request, id=None):
     """
     Actualiza el estado del registro o registros a 'rechazado'.
@@ -131,6 +138,7 @@ def registro_rechazar(request, id=None):
     # Respuesta para solicitudes no permitidas
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
+@login_required
 def registro_guardar(request, id):
     """
     Metodo POST: Vista para guardar los cambios realizados en un registro.
@@ -174,15 +182,19 @@ def registro_guardar(request, id):
     # Si no es un método POST, redirigir a la página de detalle del registro
     return redirect("registro_detalle", id=registro.id)
 
+@login_required
 def registro_enviar(request, id=None):
-    # Aquí obtienes el registro o varios
-    registros = Register.objects.filter(id=id) if id else Register.objects.all()
-    return render(request, "metadata/registro_enviar.html", {"registros": registros})
+    """Vista que devuelve el estado del envio del registro"""
+    if not id:
+        return JsonResponse({"error": "El parámetro 'id' es requerido"}, status=400)
+    else:
+        data = send_item_flow(id)
+    return JsonResponse(data)
 
+@login_required
 def estado_tarea(request, id):
     # Obtener el estado del envio de un registro
     registro = get_object_or_404(Register, id=id)
-    
     pasos = {
         'autenticado': registro.estado_envio == 'autenticado',
         'workspace': registro.estado_envio == 'workspace_creado',
@@ -190,49 +202,4 @@ def estado_tarea(request, id):
         'archivo': registro.estado_envio == 'archivo_subido',
         'publicado': registro.estado_envio == 'publicado'
     }
-    
     return JsonResponse({'pasos': pasos})
-
-def ejecutar_envio(request, id):
-    registro = Register.objects.get(pk=id)
-    errores = []  # Lista para almacenar errores
-
-    # Paso 1: Autenticación
-    token = autenticar_dspace()
-    if not token:
-        errores.append("Error en autenticación con DSpace")
-    
-    # Paso 2: Crear workspace item
-    workspace_id = None
-    if token:
-        workspace_id = crear_workspace_item(token, registro)
-        if not workspace_id:
-            errores.append("Error al crear workspace item")
-
-    # Paso 3: Agregar metadatos
-    metadata_actualizada = None
-    if workspace_id:
-        metadata_actualizada = actualizar_metadata(token, workspace_id, registro)
-        if not metadata_actualizada:
-            errores.append("Error al actualizar metadatos")
-
-    # Paso 4: Subir archivo
-    archivo_subido = None
-    if metadata_actualizada:
-        archivo_subido = subir_archivo(token, workspace_id, registro)
-        if archivo_subido is None:
-            errores.append("Error al subir archivo")
-
-    # Paso 5: Publicar item
-    if archivo_subido:
-        publicado = publicar_item(token, workspace_id, registro)
-        if not publicado:
-            errores.append("Error al publicar el registro")
-
-    # Si hubo errores, devolverlos
-    if errores:
-        registro.estado_envio = 'error'
-        registro.save()
-        return JsonResponse({"success": False, "errores": errores})
-
-    return JsonResponse({"success": True})

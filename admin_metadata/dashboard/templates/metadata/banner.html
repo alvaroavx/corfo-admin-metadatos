@@ -1,4 +1,5 @@
 <header>
+    {% if user.is_authenticated %}
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="/dashboard">
@@ -18,8 +19,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Registros</a>
                     </li>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link nav-link" style="display: inline; padding: 0; border: none;">
+                            Cerrar sesión
+                        </button>
+                    </form>
                 </ul>
             </div>
         </div>
     </nav>
+    {% endif %}
 </header>

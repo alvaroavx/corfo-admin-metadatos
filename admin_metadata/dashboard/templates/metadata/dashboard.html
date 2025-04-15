@@ -97,7 +97,8 @@
                         {% if registro.estado == "aprobado" %}
                             <a href="{% url 'registro_enviar' registro.id %}" 
                                 class="btn btn-primary btn-sm" 
-                                title="Enviar a DSpace">
+                                title="Enviar a DSpace"
+                                onclick="return confirm('¿Está seguro de que desea enviar este registro?');">
                                 <i class="fas fa-paper-plane"></i>
                             </a>
                         {% endif %}

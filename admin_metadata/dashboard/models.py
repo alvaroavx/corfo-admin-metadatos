@@ -15,6 +15,7 @@ class Register(models.Model):
         ('no_enviado', 'No Enviado'),
         ('autenticado', 'Autenticado'),
         ('workspace_creado', 'Workspace creado'),
+        ('item_creado', 'Item creado'),
         ('metadata_ingresada', 'Metadata ingresada'),
         ('archivo_subido', 'Archivo subido'),
         ('publicado', 'Publicado'),
@@ -26,6 +27,12 @@ class Register(models.Model):
     sistema_origen = models.CharField(max_length=255, verbose_name="Sistema de origen")
     fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de carga")
     coleccion = models.CharField(max_length=255, verbose_name="Colección de destino")
+    workspaceitem_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="WorkSpaceItem ID")
+    item_uuid = models.CharField(max_length=100, null=True, blank=True, verbose_name="Item UUID")
+    handle = models.CharField(max_length=255, null=True, blank=True, verbose_name="Handle")
+    inArchive = models.BooleanField(null=True, blank=True, verbose_name="Archivado?")
+    discoverable = models.BooleanField(null=True, blank=True, verbose_name="Descubrible?")
+    withdrawn = models.BooleanField(null=True, blank=True, verbose_name="Retirado?")
     estado = models.CharField(
         max_length=10,
         choices=ESTADOS,

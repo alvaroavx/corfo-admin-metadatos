@@ -79,7 +79,7 @@
                                 {% for collection in collections %}
                                     <option value="{{ collection.handle }}" 
                                             {% if registro.coleccion == collection.handle %}selected{% endif %}>
-                                        {{ collection.name }}
+                                        {{ collection.name }} ({{ collection.handle }})
                                     </option>
                                 {% endfor %}
                             </select>
