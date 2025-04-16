@@ -15,9 +15,27 @@ def dashboard(request):
     """
     Vista para listar todos los registros cargados en una tabla.
     """
+    # Actualiza el listado de colecciones interno
     fetch_and_update_collections()
+
+    # Filtros
+    estado = request.GET.get('estado')
+    autor = request.GET.get('autor')
+    sistema_origen = request.GET.get('sistema_origen')
+
     registros = Register.objects.all()
-    return render(request, 'metadata/dashboard.html', {'registros': registros})
+
+    if estado:
+        registros = registros.filter(estado=estado)
+    if autor:
+        registros = registros.filter(autor__icontains=autor)
+    if sistema_origen:
+        registros = registros.filter(sistema_origen__icontains=sistema_origen)
+    
+    return render(request, 'metadata/dashboard.html', {
+        'registros': registros,
+        'estado_seleccionado': estado,
+    })
 
 @login_required
 def registro_detalle(request, id):

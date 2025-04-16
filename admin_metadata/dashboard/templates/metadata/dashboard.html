@@ -11,6 +11,43 @@
     <div id="contenido" class="mt-5">
 
         <h1 class="mb-4">Listado de Registros</h1>
+
+        <div class="mb-4">
+            <form method="get" class="row justify-content-start gx-2 gy-2">
+                <!-- Filtro Estado -->
+                <div class="col-auto">
+                    <label for="estado" class="form-label fw-bold">Estado</label>
+                    <select name="estado" id="estado" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Todos --</option>
+                        <option value="pendiente" {% if estado_seleccionado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="aprobado" {% if estado_seleccionado == 'aprobado' %}selected{% endif %}>Aprobado</option>
+                        <option value="rechazado" {% if estado_seleccionado == 'rechazado' %}selected{% endif %}>Rechazado</option>
+                        <option value="enviado" {% if estado_seleccionado == 'enviado' %}selected{% endif %}>Enviado</option>
+                    </select>
+                </div>
+        
+                <!-- Filtro Autor -->
+                <div class="col-auto">
+                    <label for="autor" class="form-label fw-bold">Autor</label>
+                    <input type="text" name="autor" id="autor" class="form-control"
+                           value="{{ request.GET.autor }}">
+                </div>
+        
+                <!-- Filtro Sistema -->
+                <div class="col-auto">
+                    <label for="sistema_origen" class="form-label fw-bold">Sistema</label>
+                    <input type="text" name="sistema_origen" id="sistema_origen" class="form-control"
+                           value="{{ request.GET.sistema_origen }}">
+                </div>
+        
+                <!-- Botones -->
+                <div class="col-auto d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">Filtrar</button>
+                    <a href="{% url 'registros' %}" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
+        </div>
+        
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>

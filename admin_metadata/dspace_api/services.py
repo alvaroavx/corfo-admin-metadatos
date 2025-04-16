@@ -39,15 +39,18 @@ def send_item_flow(id=None):
     register.discoverable = item.get("discoverable") if item.get("discoverable") else ""
     register.withdrawn = item.get("withdrawn") if item.get("withdrawn") else ""
     register.estado_envio = "item_creado"
+    register.estado = "enviado"
     register.save()
     
     #print("item create response:\n", item)
 
     # 4: Subir archivo adjunto al item
-    result_file = client.upload_file_to_archived_item(register.item_uuid, register.archivo, csrf)
-    register.estado_envio = "publicado"
-    register.estado = "enviado"
-    register.save()
+    result_file = ""
+    if register.archivo:
+        result_file = client.upload_file_to_archived_item(register.item_uuid, register.archivo, csrf)
+        register.estado_envio = "publicado"
+        register.estado = "enviado"
+        register.save()
 
     #print('file upload response', result_file)
 
