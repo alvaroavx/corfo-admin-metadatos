@@ -17,12 +17,9 @@ def send_item_flow(id=None):
 
     # 1: obtiene el csrf
     csrf = client.get_csrf()
-    print("Paso 1 CSRF: ", csrf)
 
     # 2: obtiene authentication token
     auth, csrf = client.authenticate(csrf)
-    print("Paso 2 Auth: ", auth)
-    print("Paso 2 CSRF: ", csrf)
 
     # Se extraen datos del registro y su coleccion
     try:
@@ -44,14 +41,15 @@ def send_item_flow(id=None):
     register.estado_envio = "item_creado"
     register.save()
     
-    print("item create response:\n", item)
-    """
-    # 5: subir archivo adjunto
-    # 6: grant license
-    # 7: publish item, agregar uuid del item a este sistema (pensando en que es disinto al uuid del workspaceitem)
-    """
+    #print("item create response:\n", item)
 
-    # RECOMIENDO QUE LOS SGTES METODOS SEAN LLAMADOS DESDE SERVICE, ACA EN SERVICE SE OBTIENE LA METADATA, Y DESDE ESOS SE LLAMA A CLIENT
+    # 4: Subir archivo adjunto al item
+    result_file = client.upload_file_to_archived_item(register.item_uuid, register.archivo, csrf)
+    register.estado_envio = "publicado"
+    register.estado = "enviado"
+    register.save()
+
+    #print('file upload response', result_file)
 
     data = {
         'owning_collection': collection.uuid,
@@ -61,6 +59,7 @@ def send_item_flow(id=None):
         'workspaceitem_id': register.workspaceitem_id,
         'item_uuid': register.item_uuid,
         'item_payload': item_payload,
+        'result_file': result_file
     }
     return data
 

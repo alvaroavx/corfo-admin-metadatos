@@ -66,7 +66,7 @@
         <table class="table table-bordered">
             <tbody>
                 <tr>
-                    <th>Título</th>
+                    <th>Nombre</th>
                     <td>{{ registro.titulo }}</td>
                 </tr>
                 <tr>
@@ -120,6 +120,16 @@
                         {% endif %}
                     </td>
                 </tr>
+                {% if registro.estado == "enviado" %}
+                <tr>
+                    <th>URL Registro</th>
+                    <td>
+                        <a href="{{ DSPACE_URL }}/handle/{{ registro.handle }}" target="_blank">
+                            Ver en DSpace
+                        </a>
+                    </td>
+                </tr>
+                {% endif %}
             </tbody>
         </table>
 

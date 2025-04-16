@@ -140,6 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DSPACE_USERNAME = "soporte@opengeek.cl"
 DSPACE_PASSWORD = "184dgy"
 DSPACE_API_URL = "https://repositoriodigital.corfo.cl/server/api"
+DSPACE_URL = "https://repositoriodigital.corfo.cl"
 
 # Manejo de archivos
 MEDIA_URL = '/media/'

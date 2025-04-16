@@ -107,6 +107,108 @@ class DSpaceClient:
         else:
             return {"error": response.text, "status_code": response.status_code}
 
+    def get_bundle_by_name(self, item_uuid, csrf, bundle_name="ORIGINAL"):
+        """
+        Busca el bundle con nombre 'bundle_name' en el item.
+        Retorna el bundle (diccionario) si existe o None si no.
+        """
+        url = f"{self.base_url}/core/items/{item_uuid}/bundles"
+        headers = {
+            "X-XSRF-TOKEN": csrf,
+            "Content-Type": "application/json",
+            "Authorization": self.token
+        }
+        response = self.session.get(url, headers=headers, cookies=self.cookies)
+        if response.status_code == 200:
+            bundles = response.json().get("bundles", [])
+            for bundle in bundles:
+                if bundle.get("name") == bundle_name:
+                    return bundle
+        return None
+
+    def create_bundle(self, item_uuid, csrf, bundle_name="ORIGINAL"):
+        """
+        Crea un bundle en el item con el nombre indicado.
+        Retorna el bundle creado (diccionario) o None si ocurre error.
+        """
+        url = f"{self.base_url}/core/items/{item_uuid}/bundles"
+        headers = {
+            "X-XSRF-TOKEN": csrf,
+            "Content-Type": "application/json",
+            "Authorization": self.token
+        }
+        payload = {
+            "name": bundle_name,
+            "metadata": {}
+        }
+        response = self.session.post(url, json=payload, headers=headers, cookies=self.cookies)
+        print("create_bundle response:", response.status_code, response.text)
+        if response.status_code in [200, 201]:
+            return response.json()
+        else:
+            return None
+
+    def upload_file_to_archived_item(self, item_uuid, file_obj, csrf):
+        """
+        Sube un archivo adjunto a un item ya archivado en DSpace a través del bundle ORIGINAL.
+        Parámetros:
+        - item_uuid: UUID del item al que se agregará el archivo.
+        - file_obj: Puede ser un FieldFile (de Django FileField) o una ruta de archivo (string).
+        Flujo:
+        1. Busca el bundle ORIGINAL en el item.
+        2. Si no existe, lo crea.
+        3. Con el bundle UUID, realiza una llamada POST a /api/core/bundles/{bundle_uuid}/bitstreams
+            con el archivo en formato multipart/form-data.
+        Retorna:
+        - El JSON de respuesta de DSpace (status 200 o 201) si es exitoso.
+        - En caso de error, un diccionario con el error y el status code.
+        """
+        # Si file_obj es un FieldFile, obtener la ruta física
+        if hasattr(file_obj, 'path'):
+            file_path = file_obj.path
+        else:
+            file_path = file_obj  # Asumir que ya es una cadena
+
+        # Paso 1: Buscar el bundle ORIGINAL en el item
+        bundle = self.get_bundle_by_name(item_uuid, csrf, "ORIGINAL")
+        print('get bundle', bundle)
+        if not bundle:
+            # Paso 2: Si no existe, crearlo
+            bundle = self.create_bundle(item_uuid, csrf, "ORIGINAL")
+            print('create bundle', bundle)
+            if not bundle:
+                return {"error": "No se pudo crear el bundle ORIGINAL."}
+        
+        # Obtener el UUID del bundle
+        bundle_uuid = bundle.get("uuid")
+        if not bundle_uuid:
+            return {"error": "El bundle no tiene UUID."}
+        
+        # Construir la URL para subir la bitstream
+        url = f"{self.base_url}/core/bundles/{bundle_uuid}/bitstreams"
+        headers = {
+            "X-XSRF-TOKEN": csrf,
+            "Authorization": self.token
+        }
+        
+        try:
+            with open(file_path, "rb") as f:
+                files = {"file": f}
+                response = self.session.post(url, headers=headers, files=files, cookies=self.cookies)
+        except Exception as e:
+            print("Error al abrir el archivo:", e)
+            return {"error": str(e)}
+        
+        print("upload_file_to_archived_item response:", response.status_code, response.text)
+        
+        if response.status_code in [200, 201]:
+            return response.json()
+        else:
+            return {"error": response.text, "status_code": response.status_code}
+
+
+    ######################################################
+
     def create_workspace_item(self, payload):
         """
         Paso 3. Crea un workspace item vacío en DSpace.
@@ -165,12 +267,6 @@ class DSpaceClient:
             return response.json()
         else:
             return {"error": response.text, "status_code": response.status_code}
-
-    
-
-    ######################################################
-
-   
 
     def subir_archivo(token, workspace_id, registro):
         """

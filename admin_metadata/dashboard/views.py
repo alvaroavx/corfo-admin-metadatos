@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.conf import settings
 from rest_framework.decorators import api_view
 from dashboard.models import Register, Metadata
 from dspace_api.models import DspaceCollection
@@ -34,6 +35,7 @@ def registro_detalle(request, id):
         'registro': registro,
         'metadatos': metadatos,
         'coleccion': coleccion,
+        'DSPACE_URL': settings.DSPACE_URL
     })
 
 @login_required
@@ -46,7 +48,12 @@ def registro_modificar(request, id):
     collections = DspaceCollection.objects.all()
     # Obtener los metadatos asociados al registro
     metadatos = registro.metadata.all()  # Obtiene todos los metadatos asociados a este registro
-    return render(request, 'metadata/registro_modificar.html', {'registro': registro, 'metadatos': metadatos, 'collections': collections})
+    return render(request, 'metadata/registro_modificar.html', {
+        'registro': registro, 
+        'metadatos': metadatos, 
+        'collections': collections,
+        'DSPACE_URL': settings.DSPACE_URL
+    })
 
 @login_required
 def registro_aprobar(request, id=None):
@@ -187,9 +194,13 @@ def registro_enviar(request, id=None):
     """Vista que devuelve el estado del envio del registro"""
     if not id:
         return JsonResponse({"error": "El parámetro 'id' es requerido"}, status=400)
-    else:
-        data = send_item_flow(id)
-    return JsonResponse(data)
+     # Ejecutar el flujo de envío
+    data = send_item_flow(id)
+    if data.get("success") is False:
+        return JsonResponse(data, status=400)
+    # Redirigir al detalle del registro
+    return redirect('registro_detalle', id=id)
+    #return JsonResponse(data)
 
 @login_required
 def estado_tarea(request, id):

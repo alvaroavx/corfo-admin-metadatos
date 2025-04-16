@@ -36,6 +36,8 @@
                 <span class="badge bg-success">Aprobado</span>
             {% elif registro.estado == "rechazado" %}
                 <span class="badge bg-danger">Rechazado</span>
+            {% elif registro.estado == "enviado" %}
+                <span class="badge bg-primary">Enviado</span>
             {% else %}
                 <span class="badge bg-secondary">Desconocido</span>
             {% endif %}
@@ -49,7 +51,7 @@
             <table class="table table-bordered">
                 <tbody>
                     <tr>
-                        <th>Título</th>
+                        <th>Nombre</th>
                         <td>
                             <input type="text" name="titulo" class="form-control" value="{{ registro.titulo }}">
                         </td>
@@ -85,8 +87,22 @@
                             </select>
                         </td>
                     </tr>
+                    {% if registro.estado == "enviado" %}
+                    <tr>
+                        <th>URL Registro</th>
+                        <td>
+                            <a href="{{ DSPACE_URL }}/handle/{{ registro.handle }}" target="_blank">
+                                {{ DSPACE_URL }}/handle/{{ registro.handle }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Guardar cambios
+            </button>
 
             <!-- Metadatos Asociados al Registro -->
             <h2 class="mt-4">Metadatos Asociados</h2>
