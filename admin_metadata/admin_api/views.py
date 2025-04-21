@@ -1,4 +1,5 @@
 import json
+from django.conf import settings
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,6 +9,9 @@ from dashboard.models import Register, Metadata, MetadataField
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
 def create_register(request):
+    api_key = request.headers.get("X-API-KEY")
+    if api_key != settings.API_KEY_CORFO:
+        return Response({'error': 'No autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
     try:
         # 1. Extraer los datos del JSON de entrada
         titulo = request.data.get('titulo')
