@@ -138,7 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Variables API DSpace
 DSPACE_USERNAME = "soporte@opengeek.cl"
-DSPACE_PASSWORD = "184dgy"
+DSPACE_PASSWORD = "******"
 DSPACE_API_URL = "https://repositoriodigital.corfo.cl/server/api"
 DSPACE_URL = "https://repositoriodigital.corfo.cl"
 
