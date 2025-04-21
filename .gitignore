@@ -71,3 +71,7 @@ docker-compose.override.yml
 # Archivos de CI/CD (si no quieres incluirlos en Git)
 .github/
 .gitlab-ci.yml
+
+# Para no actualizar el settings
+*/admin_metadata/settings.py
+settings.py
