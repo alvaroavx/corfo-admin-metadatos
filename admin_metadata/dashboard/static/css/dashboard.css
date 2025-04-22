@@ -1,0 +1,249 @@
+
+/* General */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Encabezado - Similar a corfo.cl */
+.navbar {
+    background-color: white;
+    color: #002f6c;
+    border-bottom: 3px solid #ef3340;
+}
+
+.navbar a.navbar-brand {
+    font-family: "Open Sans", sans-serif;
+    color: #002f6c;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    background-color: #ef3340;
+    color: white;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+/* Menu principal */
+#greeting {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+}
+#logout button {
+    border-radius: 0px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 0.5rem;
+    display: inline; 
+    border: none;
+}
+/* Botón de navegación */
+.navbar-toggler {
+    border-color: white;
+}
+
+.navbar-toggler-icon {
+    background-color: white;
+}
+
+/* Títulos principales */
+h1, h2 {
+    font-weight: bold;
+    color: #002f6c;
+}
+
+/* Tabla - Estilo más limpio y profesional */
+.table {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.table thead {
+    background-color: #002f6c;
+    color: white;
+    font-weight: bold;
+}
+
+.table tbody tr:hover {
+    background-color: #eaf1f8;
+}
+
+.badge {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    border-radius: 12px;
+}
+
+/* Botones de acción */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #002f6c;
+    border-color: #002f6c;
+}
+
+.btn-primary:hover {
+    background-color: #004b97;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+/* Botón de enviar a DSpace */
+.btn-send {
+    background-color: #ef3340;
+    border-color: #ef3340;
+    color: white;
+}
+
+.btn-send:hover {
+    background-color: #c3222d;
+}
+
+/* Paginación */
+.dataTables_paginate .pagination {
+    justify-content: flex-end;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Estilo del contenedor principal */
+#contenido {
+    margin: 0px 80px;
+}
+.container {
+    /*background: white;*/
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Footer */
+footer {
+    background-color: #002f6c;
+    color: white;
+    padding: 10px 0;
+    margin-top: 20px;
+    font-size: 0.85rem;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Estilo para los metadatos en detalle */
+.metadata-table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    color: #212529;
+}
+
+.metadata-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* Sección de botones en el detalle */
+.btn-section {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.btn-section .btn {
+    margin-left: 10px;
+}
+
+/* Botones deshabilitados */
+.btn.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Espaciado entre secciones */
+.mt-4, .mt-5 {
+    margin-top: 30px;
+}
+
+/* Select2 mejoras */
+.select2-container--default .select2-selection--single {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    height: calc(2.25rem + 2px);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: calc(2.25rem);
+    padding-left: 12px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem);
+}
+
+/* Breadcrumb estilo CORFO */
+.breadcrumb {
+    background-color: transparent;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+.breadcrumb-item a {
+    color: #002f6c;
+    font-weight: bold;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .btn-section {
+        text-align: center;
+    }
+
+    .btn-section .btn {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+/* Mejoras visuales al hover de íconos */
+.btn i {
+    margin-right: 5px;
+}
