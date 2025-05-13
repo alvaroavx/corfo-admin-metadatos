@@ -21,12 +21,16 @@ class Register(models.Model):
         ('publicado', 'Publicado'),
         ('error', 'Error'),
     ]
+    # Informacion del Admin
     id = models.AutoField(primary_key=True)
-    titulo = models.CharField(max_length=255, verbose_name="Título")
-    autor = models.CharField(max_length=255, verbose_name="Autor")
-    sistema_origen = models.CharField(max_length=255, verbose_name="Sistema de origen")
-    fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de carga")
+    titulo = models.CharField(max_length=255, verbose_name="Título") # dc.title
+    autor = models.CharField(max_length=255, verbose_name="Autor") # dc.creator
+    sistema_origen = models.CharField(null=True, blank=True, max_length=255, verbose_name="Sistema de origen")
+    fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de carga") # dc.date
     coleccion = models.CharField(max_length=255, verbose_name="Colección de destino")
+    identificador = models.CharField(max_length=255, null=True, blank=True, verbose_name="Identificador") # dc.identifier
+    proyecto_instrumento = models.CharField(max_length=255, null=True, blank=True, verbose_name="Proyecto Instrumento") # cf.proyectoinstrumento
+    # Informacion de DSpace
     workspaceitem_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="WorkSpaceItem ID")
     item_uuid = models.CharField(max_length=100, null=True, blank=True, verbose_name="Item UUID")
     handle = models.CharField(max_length=255, null=True, blank=True, verbose_name="Handle")

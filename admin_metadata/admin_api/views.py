@@ -16,20 +16,24 @@ def create_register(request):
         # 1. Extraer los datos del JSON de entrada
         titulo = request.data.get('titulo')
         autor = request.data.get('autor')
-        sistema_origen = request.data.get('sistema_origen')
+        sistema_origen = request.data.get('sistema_origen', 'Sin información')
+        identificador = request.data.get('identificador')
+        proyecto_instrumento = request.data.get('proyecto_instrumento')
         coleccion = request.data.get('coleccion')
         metadata = request.data.get('metadata', [])  # Puede ser lista o string
         archivo = request.FILES.get('archivo')  # Capturar el archivo
 
         # 2. Validar campos principales
-        if not titulo or not autor or not sistema_origen or not coleccion:
-            return Response({'error': 'Faltan campos requeridos: titulo, autor o sistema_origen'}, status=status.HTTP_400_BAD_REQUEST)
+        if not titulo or not autor or not coleccion:
+            return Response({'error': 'Faltan campos requeridos: titulo o autor'}, status=status.HTTP_400_BAD_REQUEST)
 
         # 3. Crear el registro principal con el archivo (si existe)
         register = Register.objects.create(
             titulo=titulo,
             autor=autor,
             sistema_origen=sistema_origen,
+            identificador=identificador,
+            proyecto_instrumento=proyecto_instrumento,
             coleccion=coleccion,
             archivo=archivo  # Se almacena el archivo si fue enviado
         )

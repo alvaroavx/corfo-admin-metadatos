@@ -36,7 +36,8 @@ $(document).ready(function() {
                     pageLength: 10,
                     order: [[0, 'asc']],
                     columnDefs: [
-                        { orderable: false, targets: '_all' }
+                        { orderable: true, targets: [0, 1, 2, 3, 4, 5] }, // columnas ordenables
+                        { orderable: false, targets: '_all' }    // todas las demás, no
                     ],
                     stripeClasses: ['table-striped', 'table-hover'],
                     pagingType: 'full_numbers',

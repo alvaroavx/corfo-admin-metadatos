@@ -16,52 +16,84 @@
             <button class="btn btn-secondary" onclick="window.history.back();">
                 <i class="fas fa-arrow-left"></i> Volver
             </button>
-
             <!-- Botones de Acción -->
             <div>
+                <div class="dropdown d-inline me-2">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownDescarga" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-download"></i> Descarga
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownDescarga">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'registro_descargar_pdf' registro.id %}">
+                                <i class="fas fa-file-pdf text-danger me-2"></i> Descargar como PDF
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'registro_descargar_csv' registro.id %}">
+                                <i class="fas fa-file-csv text-success me-2"></i> Descargar como CSV
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Botón Modificar: siempre visible -->
                 <a href="{% url 'registro_modificar' registro.id %}" class="btn btn-info btn-md me-2" title="Modificar">
                     <i class="fas fa-edit"></i> Modificar
                 </a>
-                {% if registro.coleccion and registro.estado != "aprobado" and registro.estado != "enviado" %}
-                <a href="{% url 'registro_aprobar' registro.id %}" 
-                    class="btn btn-success btn-md me-2" 
-                    title="Aprobar"
-                    onclick="return confirm('¿Está seguro de que desea aprobar este registro?');">
-                    <i class="fas fa-check"></i> Aprobar
-                </a>
-                {% elif registro.estado != "enviado" %}
-                    <a class="btn btn-success btn-md me-2 disabled" 
-                        id="disabled-approve-btn"
-                        title="Colección no asignada" 
-                        tabindex="-1" 
-                        aria-disabled="true">
-                        <i class="fas fa-check"></i> Aprobar
+
+                {% if registro.estado == "rechazado" %}
+                    <!-- Botón Eliminar: solo si está rechazado -->
+                    <a href="{% url 'registro_eliminar' registro.id %}" 
+                    class="btn btn-outline-danger btn-md me-2"
+                    onclick="return confirm('¿Estás seguro de eliminar este registro definitivamente?');">
+                        <i class="fas fa-trash"></i> Eliminar
                     </a>
-                {% endif %}
-                {% if registro.estado != "enviado" %}
-                    <a href="{% url 'registro_rechazar' registro.id %}" 
-                    class="btn btn-danger btn-md me-2"
-                    title="Rechazar"
-                    onclick="return confirm('¿Está seguro de que desea rechazar este registro?');">
-                        <i class="fas fa-times"></i> Rechazar
-                    </a>
-                {% endif %}
-                {% if registro.coleccion and registro.estado == "aprobado" and registro.estado != "enviado" %}
-                    <a href="{% url 'registro_enviar' registro.id %}" 
-                        class="btn btn-primary btn-md me-2" 
-                        title="Enviar a DSpace"
-                        onclick="return confirm('¿Está seguro de que desea enviar este registro?');">
-                        <i class="fas fa-paper-plane"></i> Enviar
-                    </a>
+                {% else %}
+                    <!-- Botón Aprobar -->
+                    {% if registro.coleccion and registro.estado == "pendiente" %}
+                        <a href="{% url 'registro_aprobar' registro.id %}" 
+                            class="btn btn-success btn-md me-2" 
+                            title="Aprobar"
+                            onclick="return confirm('¿Está seguro de que desea aprobar este registro?');">
+                            <i class="fas fa-check"></i> Aprobar
+                        </a>
+                    {% elif registro.estado == "pendiente" %}
+                        <a class="btn btn-success btn-md me-2 disabled" 
+                            id="disabled-approve-btn"
+                            title="Colección no asignada" 
+                            tabindex="-1" 
+                            aria-disabled="true">
+                            <i class="fas fa-check"></i> Aprobar
+                        </a>
+                    {% endif %}
+
+                    <!-- Botón Rechazar -->
+                    {% if registro.estado == "pendiente" or registro.estado == "aprobado" %}
+                        <a href="{% url 'registro_rechazar' registro.id %}" 
+                            class="btn btn-danger btn-md me-2"
+                            title="Rechazar"
+                            onclick="return confirm('¿Está seguro de que desea rechazar este registro?');">
+                            <i class="fas fa-times"></i> Rechazar
+                        </a>
+                    {% endif %}
+
+                    <!-- Botón Enviar -->
+                    {% if registro.coleccion and registro.estado == "aprobado" %}
+                        <a href="{% url 'registro_enviar' registro.id %}" 
+                            class="btn btn-primary btn-md me-2" 
+                            title="Enviar a DSpace"
+                            onclick="return confirm('¿Está seguro de que desea enviar este registro?');">
+                            <i class="fas fa-paper-plane"></i> Enviar
+                        </a>
+                    {% endif %}
                 {% endif %}
             </div>
+
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="mt-5">
         <h1 class="mb-4">Detalle del Registro #{{ registro.id }}</h1>
-
         <!-- Información General del Registro -->
         <table class="table table-bordered">
             <tbody>
@@ -75,7 +107,33 @@
                 </tr>
                 <tr>
                     <th>Sistema de Origen</th>
-                    <td>{{ registro.sistema_origen }}</td>
+                    <td>
+                        {% if registro.sistema_origen == 'Sin información' %}
+                            <span class="badge bg-secondary">Sin información</span>
+                        {% else %}
+                            {{ registro.sistema_origen }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Identificador</th>
+                    <td>
+                        {% if registro.identificador %}
+                            {{ registro.identificador }}
+                        {% else %}
+                            <span class="badge bg-secondary">Sin información</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Proyecto Instrumento</th>
+                    <td>
+                        {% if registro.proyecto_instrumento %}
+                            {{ registro.proyecto_instrumento }}
+                        {% else %}
+                            <span class="badge bg-secondary">Sin información</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <th>Fecha de Carga</th>
@@ -182,6 +240,19 @@
             </div>-->
         </div>
     </div>
+
+    <!-- CSS de Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+
+    <!-- Bootstrap Bundle (ya deberías tener esto también) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
     <script>
         // Inicializa Select2 en el select con la clase 'select2'

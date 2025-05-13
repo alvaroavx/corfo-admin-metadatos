@@ -12,40 +12,94 @@
 
         <h1 class="mb-4">Listado de Registros</h1>
 
-        <div class="mb-4">
-            <form method="get" class="row justify-content-start gx-2 gy-2">
-                <!-- Filtro Estado -->
-                <div class="col-auto">
-                    <label for="estado" class="form-label fw-bold">Estado</label>
-                    <select name="estado" id="estado" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Todos --</option>
-                        <option value="pendiente" {% if estado_seleccionado == 'pendiente' %}selected{% endif %}>Pendiente</option>
-                        <option value="aprobado" {% if estado_seleccionado == 'aprobado' %}selected{% endif %}>Aprobado</option>
-                        <option value="rechazado" {% if estado_seleccionado == 'rechazado' %}selected{% endif %}>Rechazado</option>
-                        <option value="enviado" {% if estado_seleccionado == 'enviado' %}selected{% endif %}>Enviado</option>
-                    </select>
+        <div class="accordion mb-4" id="accordionFiltros">
+            <div class="accordion-item border border-primary filtro-panel">
+                <h2 class="accordion-header" id="headingFiltros">
+                    <button class="accordion-button collapsed fw-bold text-primary" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseFiltros" aria-expanded="false"
+                            aria-controls="collapseFiltros">
+                        <i class="fas fa-filter me-2"></i> Filtros de búsqueda
+                    </button>
+                </h2>
+                <div id="collapseFiltros" class="accordion-collapse collapse" aria-labelledby="headingFiltros"
+                    data-bs-parent="#accordionFiltros">
+                    <div class="accordion-body">
+                        <form method="get" class="row gx-3 gy-2 align-items-end">
+                            <!-- Filtro Autor -->
+                            <div class="col-auto">
+                                <label for="autor" class="form-label fw-bold">Autor</label>
+                                <select name="autor" id="autor" class="form-select" onchange="this.form.submit()">
+                                    <option value="">-- Todos --</option>
+                                    {% for a in autores %}
+                                        {% if a %}
+                                            <option value="{{ a }}" {% if filtros.autor == a %}selected{% endif %}>{{ a }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Filtro Identificador -->
+                            <div class="col-auto">
+                                <label for="identificador" class="form-label fw-bold">Identificador</label>
+                                <select name="identificador" id="identificador" class="form-select" onchange="this.form.submit()">
+                                    <option value="">-- Todos --</option>
+                                    {% for i in identificadores %}
+                                        {% if i %}
+                                            <option value="{{ i }}" {% if filtros.identificador == i %}selected{% endif %}>{{ i }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Filtro Proyecto Instrumento -->
+                            <div class="col-auto">
+                                <label for="proyecto_instrumento" class="form-label fw-bold">Proyecto Instrumento</label>
+                                <select name="proyecto_instrumento" id="proyecto_instrumento" class="form-select" onchange="this.form.submit()">
+                                    <option value="">-- Todos --</option>
+                                    {% for p in proyectos %}
+                                        {% if p %}
+                                            <option value="{{ p }}" {% if filtros.proyecto_instrumento == p %}selected{% endif %}>{{ p }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Filtro Colección -->
+                            <div class="col-auto">
+                                <label for="coleccion" class="form-label fw-bold">Colección</label>
+                                <select name="coleccion" id="coleccion" class="form-select" onchange="this.form.submit()">
+                                    <option value="">-- Todas --</option>
+                                    {% for c in colecciones %}
+                                        {% if c %}
+                                            <option value="{{ c }}" {% if filtros.coleccion == c %}selected{% endif %}>{{ c }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Filtro Estado -->
+                            <div class="col-auto">
+                                <label for="estado" class="form-label fw-bold">Estado</label>
+                                <select name="estado" id="estado" class="form-select" onchange="this.form.submit()">
+                                    <option value="">-- Todos --</option>
+                                    <option value="pendiente" {% if estado_seleccionado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                                    <option value="aprobado" {% if estado_seleccionado == 'aprobado' %}selected{% endif %}>Aprobado</option>
+                                    <option value="rechazado" {% if estado_seleccionado == 'rechazado' %}selected{% endif %}>Rechazado</option>
+                                    <option value="enviado" {% if estado_seleccionado == 'enviado' %}selected{% endif %}>Enviado</option>
+                                </select>
+                            </div>
+                    
+                            
+                    
+                            <!-- Botones -->
+                            <div class="col-auto d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">Filtrar</button>
+                                <a href="{% url 'registros' %}" class="btn btn-outline-secondary">Limpiar</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-        
-                <!-- Filtro Autor -->
-                <div class="col-auto">
-                    <label for="autor" class="form-label fw-bold">Autor</label>
-                    <input type="text" name="autor" id="autor" class="form-control"
-                           value="{{ request.GET.autor }}">
-                </div>
-        
-                <!-- Filtro Sistema -->
-                <div class="col-auto">
-                    <label for="sistema_origen" class="form-label fw-bold">Sistema</label>
-                    <input type="text" name="sistema_origen" id="sistema_origen" class="form-control"
-                           value="{{ request.GET.sistema_origen }}">
-                </div>
-        
-                <!-- Botones -->
-                <div class="col-auto d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary me-2">Filtrar</button>
-                    <a href="{% url 'registros' %}" class="btn btn-outline-secondary">Limpiar</a>
-                </div>
-            </form>
+            </div>
         </div>
         
         <table class="table table-bordered table-striped">
@@ -54,7 +108,9 @@
                     <th>ID</th>
                     <th>Título</th>
                     <th>Autor</th>
-                    <th>Sistema de Origen</th>
+                    <!--<th>Sistema de Origen</th>-->
+                    <th>Identificador</th>
+                    <th>Proyecto Instrumento</th>
                     <th>Colección asignada</th>
                     <th>Fecha de Carga</th>
                     <th>Estado</th>
@@ -72,13 +128,25 @@
             </thead>
             <tbody>
                 {% for registro in registros %}
-                <!-- Envolvemos cada fila en un enlace -->
                 <!--<tr onclick="window.location='{% url 'registro_detalle' registro.id %}'" style="cursor: pointer;">-->
                 <tr>
                     <td>{{ registro.id }}</td>
                     <td>{{ registro.titulo }}</td>
                     <td>{{ registro.autor }}</td>
-                    <td>{{ registro.sistema_origen }}</td>
+                    <!--<td>{{ registro.sistema_origen }}</td>-->
+                    <td>
+                        {% if registro.identificador %}
+                            {{ registro.identificador }}
+                        {% else %}
+                            <span class="badge bg-secondary">Sin información</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if registro.proyecto_instrumento %}
+                            {{ registro.proyecto_instrumento }}
+                        {% else %}
+                            <span class="badge bg-secondary">Sin información</span>
+                        {% endif %}
                     <td>
                         {% if registro.coleccion %}
                             {{ registro.coleccion }}
@@ -149,6 +217,9 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Bootstrap 5 Bundle with Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-...tu-hash..." crossorigin="anonymous"></script>
 
     <script>
         

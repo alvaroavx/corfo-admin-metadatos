@@ -34,6 +34,10 @@ urlpatterns = [
     path('dashboard/<int:id>/view', registro_detalle, name='registro_detalle'),
     path('dashboard/<int:id>/edit', registro_modificar, name='registro_modificar'),
     path('dashboard/<int:id>/save', registro_guardar, name='registro_guardar'),
+    path('dashboard/<int:id>/delete', registro_eliminar, name='registro_eliminar'),
+    # Descargas
+    path('dashboard/<int:id>/descargar/pdf/', registro_descargar_pdf, name='registro_descargar_pdf'),
+    path('dashboard/<int:id>/descargar/csv/', registro_descargar_csv, name='registro_descargar_csv'),
     # Aprobacion para un único y multiples registro
     path('dashboard/<int:id>/approve/', registro_aprobar, name='registro_aprobar'),
     path('dashboard/approve/', registro_aprobar, name='registro_aprobar_multiple'),

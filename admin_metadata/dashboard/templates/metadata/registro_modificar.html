@@ -44,7 +44,7 @@
         </div>
 
         <!-- Formulario para editar el registro -->
-        <form method="POST" action="{% url 'registro_guardar' registro.id %}">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'registro_guardar' registro.id %}">
             {% csrf_token %}
             
             <!-- Información General del Registro -->
@@ -69,6 +69,18 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>Identificador</th>
+                        <td>
+                            <input type="text" name="identificador" class="form-control" value="{{ registro.identificador }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Proyecto Instrumento</th>
+                        <td>
+                            <input type="text" name="proyecto_instrumento" class="form-control" value="{{ registro.proyecto_instrumento }}">
+                        </td>
+                    </tr>
+                    <tr>
                         <th>Fecha de Carga</th>
                         <td>{{ registro.fecha_carga|date:"d/m/Y H:i" }}</td>
                     </tr>
@@ -85,6 +97,26 @@
                                     </option>
                                 {% endfor %}
                             </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Archivo Adjunto</th>
+                        <td>
+                            {% if registro.archivo %}
+                                <p>
+                                    Archivo actual:
+                                    <a href="{{ registro.archivo.url }}" target="_blank">
+                                        <i class="fas fa-file-alt"></i> Descargar archivo
+                                    </a>
+                                </p>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="eliminar_archivo" id="eliminar_archivo">
+                                    <label class="form-check-label" for="eliminar_archivo">
+                                        Eliminar archivo actual
+                                    </label>
+                                </div>
+                            {% endif %}
+                            <input type="file" name="archivo" class="form-control">
                         </td>
                     </tr>
                     {% if registro.estado == "enviado" %}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            color: #212529;
+            margin: 40px;
+        }
+
+        h1, h2 {
+            color: #002f6c;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 18pt;
+            border-bottom: 2px solid #ef3340;
+            padding-bottom: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 10.5pt;
+        }
+
+        th {
+            background-color: #002f6c;
+            color: white;
+            text-align: left;
+            padding: 8px;
+            font-weight: bold;
+        }
+
+        td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f8f9fa;
+        }
+
+        .section {
+            margin-top: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 10pt;
+            background-color: #ef3340;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .text-muted {
+            color: #6c757d;
+        }
+
+        .url {
+            font-size: 9.5pt;
+            color: #004b97;
+            word-break: break-word;
+        }
+
+        .header-table td {
+            border: none;
+            padding-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Detalle del Registro #{{ registro.id }}</h1>
+
+    <table class="header-table">
+        <tr><td><strong>Título:</strong></td><td>{{ registro.titulo }}</td></tr>
+        <tr><td><strong>Autor:</strong></td><td>{{ registro.autor }}</td></tr>
+        <tr><td><strong>Sistema de Origen:</strong></td><td>{{ registro.sistema_origen|default:"-" }}</td></tr>
+        <tr><td><strong>Identificador:</strong></td><td>{{ registro.identificador|default:"-" }}</td></tr>
+        <tr><td><strong>Proyecto Instrumento:</strong></td><td>{{ registro.proyecto_instrumento|default:"-" }}</td></tr>
+        <tr><td><strong>Fecha de Carga:</strong></td><td>{{ registro.fecha_carga|date:"d/m/Y H:i" }}</td></tr>
+        <tr><td><strong>Colección:</strong></td><td>{{ registro.coleccion|default:"No asignada" }}</td></tr>
+        <tr>
+            <td><strong>Estado:</strong></td>
+            <td>
+                {% if registro.estado %}
+                    <span class="badge">{{ registro.estado|title }}</span>
+                {% else %}
+                    <span class="text-muted">No definido</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% if registro.handle %}
+        <tr>
+            <td><strong>URL en DSpace:</strong></td>
+            <td><span class="url">http://repositoriodigital.corfo.cl/handle/{{ registro.handle }}</span></td>
+        </tr>
+        {% endif %}
+    </table>
+
+    <div class="section">
+        <h2>Metadatos Asociados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for meta in metadatos %}
+                <tr>
+                    <td>{{ meta.metadata_field }}</td>
+                    <td>{{ meta.text_value }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2"><em>No hay metadatos disponibles</em></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

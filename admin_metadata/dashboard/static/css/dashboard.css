@@ -247,3 +247,25 @@ footer p {
 .btn i {
     margin-right: 5px;
 }
+
+/* Filtros del dashboard */
+.filtro-panel {
+    background-color: #f1f5fb;
+    border: 2px solid #002f6c;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.filtro-panel h5 {
+    color: #002f6c;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.accordion-button {
+    background-color: #f1f5fb;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e7effa;
+    color: #002f6c;
+}
