@@ -30,13 +30,60 @@ $(document).ready(function() {
                         '<"row"<"col-sm-12"tr>>' +
                         '<"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     buttons: [
-                        'copy', 'excel', 'csv', 'pdf', 'print', 'colvis' // Botones de exportación y visibilidad de columnas
+                        {
+                            extend: 'copy',
+                            text: '<i class="fas fa-copy" title="Copiar registros al portapapeles"></i>',
+                            className: 'btn-sm',
+                            exportOptions: {
+                                columns: [0,1,2,3,4,5,6,7]
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            text: '<i class="fas fa-file-excel" title="Exportar registros a Excel"></i>',
+                            className: 'btn-sm',
+                            exportOptions: {
+                                columns: [0,1,2,3,4,5,6,7]
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            text: '<i class="fas fa-file-csv" title="Exportar registros a CSV"></i>',
+                            className: 'btn-sm',
+                            exportOptions: {
+                                columns: [0,1,2,3,4,5,6,7]
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            text: '<i class="fas fa-file-pdf" title="Exportar registros a PDF"></i>',
+                            className: 'btn-sm',
+                            exportOptions: {
+                                columns: [0,1,2,3,4,5,6,7]
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="fas fa-print" title="Imprimir listado de registros"></i>',
+                            className: 'btn-sm',
+                            exportOptions: {
+                                columns: [0,1,2,3,4,5,6,7]
+                            }
+                        },
+                        {
+                            extend: 'colvis',
+                            text: '<i class="fas fa-columns" title="Columnas visibles"></i>',
+                            className: 'btn-sm',
+                            exportOptions: {
+                                columns: [0,1,2,3,4,5,6,7]
+                            }
+                        }
                     ],
                     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
                     pageLength: 10,
                     order: [[0, 'asc']],
                     columnDefs: [
-                        { orderable: true, targets: [0, 1, 2, 3, 4, 5] }, // columnas ordenables
+                        { orderable: true, targets: [0, 1, 2, 3, 4, 5, 6] }, // columnas ordenables
                         { orderable: false, targets: '_all' }    // todas las demás, no
                     ],
                     stripeClasses: ['table-striped', 'table-hover'],

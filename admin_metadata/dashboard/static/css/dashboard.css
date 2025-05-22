@@ -140,6 +140,48 @@ h1, h2 {
     border-radius: 5px;
     padding: 5px;
 }
+/* Botones del Datatable */
+.dt-button {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+}
+.dt-button i {
+    font-size: 14px;
+}
+/* Estilo mejorado para el buscador general */
+
+
+.dataTables_filter label {
+    font-weight: bold;
+    color: #002f6c;
+    margin-bottom: 0;
+}
+
+
+.dataTables_filter {
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.dataTables_filter input {
+    border: 2px solid #002f6c;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #f1f5fb;
+    color: #002f6c;
+    width: 400px;  /* ⬅️ Aquí ampliamos el ancho */
+    transition: all 0.2s ease-in-out;
+}
+
+.dataTables_filter input:focus {
+    outline: none;
+    border-color: #004b97;
+    background-color: #e9f2fc;
+}
 
 /* Estilo del contenedor principal */
 #contenido {
@@ -268,4 +310,28 @@ footer p {
 .accordion-button:not(.collapsed) {
     background-color: #e7effa;
     color: #002f6c;
+}
+
+/* Botones secundarios del encabezado */
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+}
+
+.btn-outline-secondary {
+    border: 1px solid #6c757d;
+    color: #6c757d;
+    background-color: white;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #e2e6ea;
+    color: #002f6c;
+    border-color: #adb5bd;
+}
+
+/* Separación entre icono y texto más sutil */
+.btn-sm i {
+    margin-right: 6px;
+    font-size: 0.9rem;
 }

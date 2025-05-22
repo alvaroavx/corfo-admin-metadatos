@@ -12,84 +12,91 @@
     <!-- Botones en la cabecera -->
     <div class="mt-4">
         <div class="d-flex justify-content-between align-items-center">
-            <!-- Botón Volver -->
-            <button class="btn btn-secondary" onclick="window.history.back();">
-                <i class="fas fa-arrow-left"></i> Volver
-            </button>
-            <!-- Botones de Acción -->
-            <div>
-                <div class="dropdown d-inline me-2">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownDescarga" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-download"></i> Descarga
+            
+            <!-- 🔙 Botones a la izquierda -->
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" onclick="window.location.href='/dashboard';">
+                    <i class="fas fa-table"></i> Listado de Registros
+                </button>
+            </div>
+
+            <!-- ⚙️ Botones de acción -->
+            <div class="d-flex gap-2">
+
+                <!-- Dropdown descarga -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownDescarga" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-download"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownDescarga">
                         <li>
-                            <a class="dropdown-item" href="{% url 'registro_descargar_pdf' registro.id %}">
+                            <a class="dropdown-item btn-sm" href="{% url 'registro_descargar_pdf' registro.id %}">
                                 <i class="fas fa-file-pdf text-danger me-2"></i> Descargar como PDF
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{% url 'registro_descargar_csv' registro.id %}">
+                            <a class="dropdown-item btn-sm" href="{% url 'registro_descargar_csv' registro.id %}">
                                 <i class="fas fa-file-csv text-success me-2"></i> Descargar como CSV
                             </a>
                         </li>
                     </ul>
                 </div>
-                <!-- Botón Modificar: siempre visible -->
-                <a href="{% url 'registro_modificar' registro.id %}" class="btn btn-info btn-md me-2" title="Modificar">
+
+                <!-- Botón Modificar -->
+                <a href="{% url 'registro_modificar' registro.id %}" 
+                    class="btn btn-info btn-sm" 
+                    title="Modificar">
                     <i class="fas fa-edit"></i> Modificar
                 </a>
 
                 {% if registro.estado == "rechazado" %}
-                    <!-- Botón Eliminar: solo si está rechazado -->
+                    <!-- Botón Eliminar -->
                     <a href="{% url 'registro_eliminar' registro.id %}" 
-                    class="btn btn-outline-danger btn-md me-2"
-                    onclick="return confirm('¿Estás seguro de eliminar este registro definitivamente?');">
+                    class="btn btn-outline-danger btn-sm"
+                    onclick="return confirm('¿Estás seguro de eliminar este registro definitivamente?');"
+                    title="Eliminar">
                         <i class="fas fa-trash"></i> Eliminar
                     </a>
                 {% else %}
-                    <!-- Botón Aprobar -->
                     {% if registro.coleccion and registro.estado == "pendiente" %}
                         <a href="{% url 'registro_aprobar' registro.id %}" 
-                            class="btn btn-success btn-md me-2" 
-                            title="Aprobar"
-                            onclick="return confirm('¿Está seguro de que desea aprobar este registro?');">
+                        class="btn btn-success btn-sm" 
+                        title="Aprobar"
+                        onclick="return confirm('¿Está seguro de que desea aprobar este registro?');">
                             <i class="fas fa-check"></i> Aprobar
                         </a>
                     {% elif registro.estado == "pendiente" %}
-                        <a class="btn btn-success btn-md me-2 disabled" 
-                            id="disabled-approve-btn"
-                            title="Colección no asignada" 
-                            tabindex="-1" 
-                            aria-disabled="true">
+                        <a class="btn btn-success btn-sm disabled" 
+                        id="disabled-approve-btn"
+                        title="Colección no asignada"
+                        tabindex="-1"
+                        aria-disabled="true">
                             <i class="fas fa-check"></i> Aprobar
                         </a>
                     {% endif %}
 
-                    <!-- Botón Rechazar -->
                     {% if registro.estado == "pendiente" or registro.estado == "aprobado" %}
                         <a href="{% url 'registro_rechazar' registro.id %}" 
-                            class="btn btn-danger btn-md me-2"
-                            title="Rechazar"
-                            onclick="return confirm('¿Está seguro de que desea rechazar este registro?');">
+                        class="btn btn-danger btn-sm"
+                        title="Rechazar"
+                        onclick="return confirm('¿Está seguro de que desea rechazar este registro?');">
                             <i class="fas fa-times"></i> Rechazar
                         </a>
                     {% endif %}
 
-                    <!-- Botón Enviar -->
                     {% if registro.coleccion and registro.estado == "aprobado" %}
                         <a href="{% url 'registro_enviar' registro.id %}" 
-                            class="btn btn-primary btn-md me-2" 
-                            title="Enviar a DSpace"
-                            onclick="return confirm('¿Está seguro de que desea enviar este registro?');">
-                            <i class="fas fa-paper-plane"></i> Enviar
+                        class="btn btn-primary btn-sm"
+                        title="Enviar a DSpace"
+                        onclick="return confirm('¿Está seguro de que desea enviar este registro?');">
+                            <i class="fas fa-paper-plane"></i> Enviar a DSpace
                         </a>
                     {% endif %}
                 {% endif %}
             </div>
-
         </div>
     </div>
+
 
     <!-- Main Content -->
     <div class="mt-5">
@@ -219,8 +226,8 @@
     <div class=" mt-4">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Botón Volver -->
-            <button class="btn btn-secondary" onclick="window.history.back();">
-                <i class="fas fa-arrow-left"></i> Volver
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.location.href='/dashboard';">
+                <i class="fas fa-table"></i> Listado de Registros
             </button>
 
             <!-- Botones de Acción 
